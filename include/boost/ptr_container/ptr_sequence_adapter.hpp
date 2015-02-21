@@ -664,7 +664,7 @@ namespace ptr_container_detail
             
         }
 
-        void range_check_impl( iterator first, iterator last, 
+        void range_check_impl( iterator, iterator, 
                                std::bidirectional_iterator_tag )
         { /* do nothing */ }
 
@@ -673,7 +673,8 @@ namespace ptr_container_detail
         {
             BOOST_ASSERT( first <= last && "out of range unique()/erase_if()" );
             BOOST_ASSERT( this->begin() <= first && "out of range unique()/erase_if()" );
-            BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );             
+            BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );
+            (void)first; (void)last;
         }
         
         void range_check( iterator first, iterator last )
