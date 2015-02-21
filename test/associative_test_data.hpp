@@ -45,7 +45,7 @@ template< class T >
 struct test_algorithms<T,false>
 {
     template< class Cont>
-    void operator()( Cont& c, const Cont& c2 ) const
+    void operator()( Cont&, const Cont& ) const
     {
     }
 };
@@ -145,11 +145,11 @@ void ptr_set_test()
     c. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), c3 );
     BOOST_CHECK( c3.empty() == false );
     c.clear();
-    unsigned long c3size = c3.size();
+    std::size_t c3size = c3.size();
     hide_warning( c3size );
-    unsigned long num  = c. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), 
-                                                               c3.end(), 
-                                                              c3 );
+    std::size_t num  = c. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), 
+                                                             c3.end(), 
+                                                             c3 );
     
     BOOST_CHECK( num > 0 ); 
     BOOST_CHECK_EQUAL( num, c.size() );
