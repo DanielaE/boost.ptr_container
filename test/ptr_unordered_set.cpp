@@ -81,7 +81,7 @@ void test_erase()
     typename PtrSet::iterator i = s.find( t );
 
     BOOST_CHECK( i != s.end() );
-    unsigned n = s.erase( t );
+    std::size_t n = s.erase( t );
     BOOST_CHECK( n > 0 );   
 }
 
@@ -141,7 +141,7 @@ void test_set()
 
 using boost::unit_test::test_suite;
 
-test_suite* init_unit_test_suite( int argc, char* argv[] )
+test_suite* init_unit_test_suite( int, char*[] )
 {
     test_suite* test = BOOST_TEST_SUITE( "Pointer Container Test Suite" );
 
