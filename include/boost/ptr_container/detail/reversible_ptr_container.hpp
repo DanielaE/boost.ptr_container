@@ -264,6 +264,7 @@ namespace ptr_container_detail
                 BOOST_PTR_CONTAINER_THROW_EXCEPTION( 0 == x && "null not allowed", 
                                                      bad_pointer, msg );
             }
+            (void)x; (void)msg;
         }
 
         static Ty_* null_policy_allocate_clone( const Ty_* x )

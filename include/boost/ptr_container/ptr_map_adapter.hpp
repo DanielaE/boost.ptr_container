@@ -22,6 +22,11 @@
 #include <boost/static_assert.hpp>
 #include <boost/range/iterator_range.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 namespace boost
 {
 namespace ptr_container_detail
@@ -870,5 +875,9 @@ namespace ptr_container_detail
     }
     
 } // namespace 'boost'  
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif
