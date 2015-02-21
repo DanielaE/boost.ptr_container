@@ -47,7 +47,7 @@ struct implementation : abstract_base
     }
 };
 
-inline std::ostream& operator<<( std::ostream& out, const abstract_base& r )
+inline std::ostream& operator<<( std::ostream& out, const abstract_base& )
 {
     return out;    
 }
@@ -413,7 +413,7 @@ void test_map_iterators()
 
 using boost::unit_test::test_suite;
 
-test_suite* init_unit_test_suite( int argc, char* argv[] )
+test_suite* init_unit_test_suite( int, char*[] )
 {
     test_suite* test = BOOST_TEST_SUITE( "Pointer Container Test Suite" );
 
