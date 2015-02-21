@@ -23,6 +23,11 @@
 #include <boost/static_assert.hpp>
 #include <boost/range/iterator_range.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4127) // conditional expression is constant
+#endif
+
 #if defined(BOOST_PTR_CONTAINER_DISABLE_DEPRECATED)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -977,6 +982,9 @@ namespace ptr_container_detail
 
 #if defined(BOOST_PTR_CONTAINER_DISABLE_DEPRECATED)
 #pragma GCC diagnostic pop
+#endif
+#ifdef BOOST_MSVC
+# pragma warning(pop)
 #endif
 
 #endif
