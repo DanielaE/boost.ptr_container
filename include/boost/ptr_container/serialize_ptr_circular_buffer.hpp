@@ -22,7 +22,7 @@ namespace serialization
 {
 
 template<class Archive, class T, class CloneAllocator, class Allocator>
-void load(Archive& ar, ptr_circular_buffer<T, CloneAllocator, Allocator>& c, unsigned int version)
+void load(Archive& ar, ptr_circular_buffer<T, CloneAllocator, Allocator>& c, unsigned int)
 {
     typedef ptr_circular_buffer<T, CloneAllocator, Allocator> container_type;
     typedef BOOST_DEDUCED_TYPENAME container_type::size_type size_type;
