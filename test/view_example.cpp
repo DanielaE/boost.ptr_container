@@ -67,7 +67,7 @@ typedef boost::ptr_vector<photon,boost::view_clone_allocator> view_type;
 //
 // Our first sort criterium
 //
-struct sort_by_color : std::binary_function<photon,photon,bool>
+struct sort_by_color
 {
     bool operator()( const photon& l, const photon& r ) const
     {
@@ -78,7 +78,7 @@ struct sort_by_color : std::binary_function<photon,photon,bool>
 //
 // Our second sort criterium
 //
-struct sort_by_direction : std::binary_function<photon,photon,bool>
+struct sort_by_direction
 {
     bool operator()( const photon& l, const photon& r ) const
     {
@@ -90,7 +90,7 @@ struct sort_by_direction : std::binary_function<photon,photon,bool>
 //
 // Our third sort criterium
 //
-struct sort_by_power : std::binary_function<photon,photon,bool>
+struct sort_by_power
 {
     bool operator()( const photon& l, const photon& r ) const
     {

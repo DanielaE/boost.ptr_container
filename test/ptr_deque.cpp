@@ -38,7 +38,7 @@ void test_ptr_deque()
     ptr_deque<int> di;
     di.push_front( new int(0) );
     BOOST_CHECK_EQUAL( di.size(), 1u );
-    di.push_front( std::auto_ptr<int>( new int(1) ) );
+    di.push_front( std::unique_ptr<int>( new int(1) ) );
     BOOST_CHECK_EQUAL( di.size(), 2u ); 
 }
 

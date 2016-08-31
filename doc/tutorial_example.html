@@ -170,7 +170,7 @@
     // And we also want to transfer an animal
     // safely around. The easiest way to think
     // about '::auto_type' is to imagine a simplified
-    // 'std::auto_ptr&lt;T&gt;' ... this means you can expect
+    // 'std::unique_ptr&lt;T&gt;' ... this means you can expect
     // 
     //   T* operator-&gt;()
     //   T* release()
@@ -252,7 +252,7 @@
     <span class=comment>//
     // If things are bad, we might choose to sell all animals :-(
     //</span>
-    <span class=identifier>std</span><span class=special>::</span><span class=identifier>auto_ptr</span><span class=special>&lt;</span><span class=identifier>barn_type</span><span class=special>&gt;</span> <span class=identifier>sell_farm</span><span class=special>()</span>
+    <span class=identifier>std</span><span class=special>::</span><span class=identifier>unique_ptr</span><span class=special>&lt;</span><span class=identifier>barn_type</span><span class=special>&gt;</span> <span class=identifier>sell_farm</span><span class=special>()</span>
     <span class=special>{</span>
         <span class=keyword>return</span> <span class=identifier>barn</span><span class=special>.</span><span class=identifier>release</span><span class=special>();</span>
     <span class=special>}</span>
@@ -262,7 +262,7 @@
     // else's farm :-)
     //</span>
 
-    <span class=keyword>void</span> <span class=identifier>buy_farm</span><span class=special>(</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>auto_ptr</span><span class=special>&lt;</span><span class=identifier>barn_type</span><span class=special>&gt;</span> <span class=identifier>other</span> <span class=special>)</span>
+    <span class=keyword>void</span> <span class=identifier>buy_farm</span><span class=special>(</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>unique_ptr</span><span class=special>&lt;</span><span class=identifier>barn_type</span><span class=special>&gt;</span> <span class=identifier>other</span> <span class=special>)</span>
     <span class=special>{</span>
         <span class=comment>//
         // This line inserts all the animals from 'other'

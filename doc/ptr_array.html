@@ -330,12 +330,12 @@ namespace boost
         explicit ptr_array( const ptr_array&amp; r );
         template&lt; class U &gt;
         explicit ptr_array( const ptr_array&lt;U,N&gt;&amp; r );                
-        explicit ptr_array( std::auto_ptr&lt;ptr_array&gt;&amp; r );
+        explicit ptr_array( std::unique_ptr&lt;ptr_array&gt;&amp; r );
         
         ptr_array&amp; operator=( const ptr_array&amp; r );
         template&lt; class U &gt;
         ptr_array&amp; operator=( const ptr_array&lt;U,N&gt;&amp; r );
-        ptr_array&amp; operator=( std::auto_ptr&lt;this_type&gt; r );
+        ptr_array&amp; operator=( std::unique_ptr&lt;this_type&gt; r );
 
     public: // <a class="reference" href="reversible_ptr_container.html#iterators">iterators</a>
 
@@ -363,14 +363,14 @@ namespace boost
         template&lt; size_t idx &gt;
         auto_type replace( T* r );
         template&lt; size_t idx, class U &gt;
-        auto_type replace( std::auto_ptr&lt;U&gt; r );
+        auto_type replace( std::unique_ptr&lt;U&gt; r );
         auto_type replace( size_t idx, T* r );
         template&lt; class U &gt;
-        auto_type replace( size_t idx, std::auto_ptr&lt;U&gt; r );
+        auto_type replace( size_t idx, std::unique_ptr&lt;U&gt; r );
 
     public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
-        std::auto_ptr&lt;ptr_array&gt;  clone() const;    
-        std::auto_ptr&lt;ptr_array&gt;  release();
+        std::unique_ptr&lt;ptr_array&gt;  clone() const;    
+        std::unique_ptr&lt;ptr_array&gt;  release();
         template&lt; size_t idx &gt;
         bool                      is_null() const;
         bool                      is_null( size_t idx ) const;
@@ -400,7 +400,7 @@ namespace boost
 <li>Effects: Constructs array by cloning <tt class="docutils literal"><span class="pre">r</span></tt></li>
 </ul>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_array(</span> <span class="pre">std::auto_ptr&lt;ptr_array&gt;&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_array(</span> <span class="pre">std::unique_ptr&lt;ptr_array&gt;&amp;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: take ownership of the supplied pointers</li>
@@ -417,7 +417,7 @@ namespace boost
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_array&amp;</span> <span class="pre">operator=(</span> <span class="pre">std::auto_ptr&lt;this_type&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">ptr_array&amp;</span> <span class="pre">operator=(</span> <span class="pre">std::unique_ptr&lt;this_type&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: take ownership of the supplied pointers</li>
@@ -519,7 +519,7 @@ namespace boost
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">size_t</span> <span class="pre">idx,</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">std::auto_ptr&lt;U&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">size_t</span> <span class="pre">idx,</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">std::unique_ptr&lt;U&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">replace&lt;idx&gt;(</span> <span class="pre">r.release()</span> <span class="pre">);</span></tt></li>
@@ -536,7 +536,7 @@ namespace boost
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">size_t</span> <span class="pre">idx,</span> <span class="pre">std::auto_ptr&lt;U&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">size_t</span> <span class="pre">idx,</span> <span class="pre">std::unique_ptr&lt;U&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">replace(</span> <span class="pre">idx,</span> <span class="pre">r.release()</span> <span class="pre">);</span></tt></li>
@@ -548,7 +548,7 @@ namespace boost
 <div class="section">
 <h2><a id="semantics-pointer-container-requirements" name="semantics-pointer-container-requirements"><span id="pointer-container-requirements"></span>Semantics: pointer container requirements</a></h2>
 <ul>
-<li><p class="first"><tt class="docutils literal"><span class="pre">std::auto_ptr&lt;ptr_array&gt;</span>&nbsp; <span class="pre">clone()</span> <span class="pre">const;</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">std::unique_ptr&lt;ptr_array&gt;</span>&nbsp; <span class="pre">clone()</span> <span class="pre">const;</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: Returns a deep copy of the container</li>
@@ -557,7 +557,7 @@ namespace boost
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">std::auto_ptr&lt;ptr_array&gt;</span>&nbsp; <span class="pre">release();</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">std::unique_ptr&lt;ptr_array&gt;</span>&nbsp; <span class="pre">release();</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: Releases ownership of the container. This is a useful way of returning a container from a function.</li>

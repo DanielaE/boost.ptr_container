@@ -310,7 +310,7 @@ ul.auto-toc {
 my_container.push_back( 0 );            // throws bad_ptr 
 my_container.replace( an_iterator, 0 ); // throws bad_ptr
 my_container.insert( an_iterator, 0 );  // throws bad_ptr       
-std::auto_ptr&lt;T&gt; p( 0 );
+std::unique_ptr&lt;T&gt; p( 0 );
 my_container.push_back( p );            // throws bad_ptr                                                          
 </pre>
 </div>
@@ -365,7 +365,7 @@ ptr_list&lt;X&gt; list;
 list.push_back( new_clone( x ) );    // insert a clone
 list.push_back( new X );             // always give the pointer directly to the container to avoid leaks
 list.push_back( &amp;x );                // don't do this!!! 
-std::auto_ptr&lt;X&gt; p( new X );
+std::unique_ptr&lt;X&gt; p( new X );
 list.push_back( p );                 // give up ownership
 BOOST_ASSERT( p.get() == 0 );
 </pre>
@@ -598,7 +598,7 @@ The source code can also be found <a class="reference" href="../test/tut1.cpp">h
     // And we also want to transfer an animal
     // safely around. The easiest way to think
     // about '::auto_type' is to imagine a simplified
-    // 'std::auto_ptr&lt;T&gt;' ... this means you can expect
+    // 'std::unique_ptr&lt;T&gt;' ... this means you can expect
     // 
     //   T* operator-&gt;()
     //   T* release()
@@ -680,7 +680,7 @@ The source code can also be found <a class="reference" href="../test/tut1.cpp">h
     <span class=comment>//
     // If things are bad, we might choose to sell all animals :-(
     //</span>
-    <span class=identifier>std</span><span class=special>::</span><span class=identifier>auto_ptr</span><span class=special>&lt;</span><span class=identifier>barn_type</span><span class=special>&gt;</span> <span class=identifier>sell_farm</span><span class=special>()</span>
+    <span class=identifier>std</span><span class=special>::</span><span class=identifier>unique_ptr</span><span class=special>&lt;</span><span class=identifier>barn_type</span><span class=special>&gt;</span> <span class=identifier>sell_farm</span><span class=special>()</span>
     <span class=special>{</span>
         <span class=keyword>return</span> <span class=identifier>barn</span><span class=special>.</span><span class=identifier>release</span><span class=special>();</span>
     <span class=special>}</span>
@@ -690,7 +690,7 @@ The source code can also be found <a class="reference" href="../test/tut1.cpp">h
     // else's farm :-)
     //</span>
 
-    <span class=keyword>void</span> <span class=identifier>buy_farm</span><span class=special>(</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>auto_ptr</span><span class=special>&lt;</span><span class=identifier>barn_type</span><span class=special>&gt;</span> <span class=identifier>other</span> <span class=special>)</span>
+    <span class=keyword>void</span> <span class=identifier>buy_farm</span><span class=special>(</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>unique_ptr</span><span class=special>&lt;</span><span class=identifier>barn_type</span><span class=special>&gt;</span> <span class=identifier>other</span> <span class=special>)</span>
     <span class=special>{</span>
         <span class=comment>//
         // This line inserts all the animals from 'other'

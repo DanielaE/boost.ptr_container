@@ -333,7 +333,7 @@ namespace boost
     public: // <a class="reference" href="#modifiers">modifiers</a>
         void                push_front( T* x );
         template&lt; class U &gt;
-        void                push_front( std::auto_ptr&lt;U&gt; x );
+        void                push_front( std::unique_ptr&lt;U&gt; x );
         auto_type           pop_front();
      
     public: // <a class="reference" href="#list-operations">list operations</a>
@@ -359,7 +359,7 @@ namespace boost
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">push_front(</span> <span class="pre">std::auto_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">push_front(</span> <span class="pre">std::unique_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">push_front(</span> <span class="pre">x.release()</span> <span class="pre">);</span></tt></li>

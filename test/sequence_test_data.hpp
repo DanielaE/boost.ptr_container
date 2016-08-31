@@ -82,7 +82,7 @@ void reversible_container_test()
     BOOST_DEDUCED_TYPENAME C::size_type s2                = c.max_size();
     hide_warning(s2);
     c.push_back( new T );
-    c.push_back( std::auto_ptr<T>( new T ) );
+    c.push_back( std::unique_ptr<T>( new T ) );
     bool b                                                = c.empty();
     BOOST_CHECK( !c.empty() );
     b                                                     = is_null( c.begin() );
@@ -103,8 +103,7 @@ void reversible_container_test()
     c.pop_back(); 
     BOOST_CHECK( !c.empty() );
     c.insert( c.end(), new T );
-    std::auto_ptr<T> ap(new T);
-    c.insert( c.end(), ap );
+    c.insert( c.end(), std::unique_ptr<T> (new T) );
     BOOST_CHECK_EQUAL( c.size(), 5u );
 
 #if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
@@ -136,11 +135,11 @@ void reversible_container_test()
 #else
     auto_type ptr       = c.release( c.begin() );
 #endif    
-    std::auto_ptr<C> ap2 = c.release();
+    std::unique_ptr<C> ap2 = c.release();
     c                   = c2.clone();
     BOOST_CHECK( !c.empty() );
     auto_type ptr2      = c.replace( c.begin(), new T );
-    ptr2                = c.replace( c.begin(), std::auto_ptr<T>( new T ) );
+    ptr2                = c.replace( c.begin(), std::unique_ptr<T>( new T ) );
     BOOST_TEST_MESSAGE( "finished release/clone/replace test" ); 
                      
     c3.push_back( new T );

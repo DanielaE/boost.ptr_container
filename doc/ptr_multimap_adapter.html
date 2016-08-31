@@ -344,7 +344,7 @@ namespace boost
     public: // <a class="reference" href="#modifiers">modifiers</a>         
         iterator  insert( key_type&amp; k, T* x ); 
         template&lt; class U &gt;
-        iterator  insert( const key_type&amp;, std::auto_ptr&lt;U&gt; x );                        
+        iterator  insert( const key_type&amp;, std::unique_ptr&lt;U&gt; x );                        
 
     public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
         void      transfer( iterator object, ptr_multimap_adapter&amp; from );
@@ -401,7 +401,7 @@ is propagated to the pointer (that is, to <tt class="docutils literal"><span cla
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">iterator</span> <span class="pre">insert(</span> <span class="pre">const</span> <span class="pre">key_type&amp;</span> <span class="pre">k,</span> <span class="pre">std::auto_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">iterator</span> <span class="pre">insert(</span> <span class="pre">const</span> <span class="pre">key_type&amp;</span> <span class="pre">k,</span> <span class="pre">std::unique_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Equivalent to (but without the <tt class="docutils literal"><span class="pre">const_cast</span></tt>): <tt class="docutils literal"><span class="pre">return</span> <span class="pre">insert(</span> <span class="pre">const_cast&lt;key_type&amp;&gt;(k),</span> <span class="pre">x.release()</span> <span class="pre">);</span></tt></li>

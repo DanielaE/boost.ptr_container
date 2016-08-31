@@ -34,7 +34,7 @@ void test_ptr_map_adapter()
     
     ptr_map<string,int> m;
     m.insert( joe, new int( 4 ) );
-    m.insert( brian, std::auto_ptr<int>( new int( 6 ) ) );
+    m.insert( brian, std::unique_ptr<int>( new int( 6 ) ) );
     m[ joe ]   += 56;
     m[ brian ] += 10;
 

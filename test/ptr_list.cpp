@@ -44,7 +44,7 @@ void test_list()
     list.push_back( new int(2) );
     list.push_back( new int(1) );
     list.push_front( new int(3) );
-    list.push_front( std::auto_ptr<int>( new int(42) ) );
+    list.push_front( std::unique_ptr<int>( new int(42) ) );
     list.reverse();
 
 }

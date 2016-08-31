@@ -84,10 +84,9 @@ void test_set()
 
     BOOST_CHECK_THROW( set.insert( 0 ), bad_ptr_container_operation );
     set.insert( new int(0) );
-    std::auto_ptr<int> ap( new int(1) );
-    set.insert( ap );
+    set.insert( std::unique_ptr<int>( new int(1) ) );
     BOOST_CHECK_THROW( (set.replace(set.begin(), 0 )), bad_ptr_container_operation );
-    BOOST_CHECK_THROW( (set.replace(set.begin(), std::auto_ptr<int>(0) )), bad_ptr_container_operation );
+    BOOST_CHECK_THROW( (set.replace(set.begin(), std::unique_ptr<int>(nullptr) )), bad_ptr_container_operation );
 
     test_erase< ptr_set<Base> >();
     test_erase< ptr_multiset<Base> >();

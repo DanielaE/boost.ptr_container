@@ -345,7 +345,7 @@ namespace boost
     public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
        auto_type replace( size_type idx, T* x );  
        template&lt; class U &gt;
-       auto_type replace( size_type idx, std::auto_ptr&lt;U&gt; x );  
+       auto_type replace( size_type idx, std::unique_ptr&lt;U&gt; x );  
        bool      is_null( size_type idx ) const;
        
     public: // <a class="reference" href="#c-array-support">C-array support</a>
@@ -435,7 +435,7 @@ of size least <tt class="docutils literal"><span class="pre">to_reserve</span></
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">size_type</span> <span class="pre">idx,</span> <span class="pre">std::auto_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">size_type</span> <span class="pre">idx,</span> <span class="pre">std::unique_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">replace(</span> <span class="pre">idx,</span> <span class="pre">x.release()</span> <span class="pre">);</span></tt></li>

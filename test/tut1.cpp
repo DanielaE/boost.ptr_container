@@ -162,7 +162,7 @@ public:
     // And we also want to transfer an animal
     // safely around. The easiest way to think
     // about '::auto_type' is to imagine a simplified
-    // 'std::auto_ptr<T>' ... this means you can expect
+    // 'std::unique_ptr<T>' ... this means you can expect
     // 
     //   T* operator->()
     //   T* release()
@@ -244,7 +244,7 @@ public:
     //
     // If things are bad, we might choose to sell all animals :-(
     //
-    std::auto_ptr<barn_type> sell_farm()
+    std::unique_ptr<barn_type> sell_farm()
     {
         return barn.release();
     }
@@ -254,7 +254,7 @@ public:
     // else's farm :-)
     //
 
-    void buy_farm( std::auto_ptr<barn_type> other )
+    void buy_farm( std::unique_ptr<barn_type> other )
     {
         //
         // This line inserts all the animals from 'other'

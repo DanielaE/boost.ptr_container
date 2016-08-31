@@ -183,8 +183,8 @@ namespace ptr_container_detail
         { }
                 
         template< class PtrContainer >
-        explicit ptr_set_adapter_base( std::auto_ptr<PtrContainer> clone )
-         : base_type( clone )
+        explicit ptr_set_adapter_base( std::unique_ptr<PtrContainer> clone )
+         : base_type( std::move( clone ) )
         { }
         
         ptr_set_adapter_base& operator=( ptr_set_adapter_base r ) 
@@ -194,9 +194,9 @@ namespace ptr_container_detail
         }
         
         template< typename PtrContainer >
-        ptr_set_adapter_base& operator=( std::auto_ptr<PtrContainer> clone )    
+        ptr_set_adapter_base& operator=( std::unique_ptr<PtrContainer> clone )    
         {
-            base_type::operator=( clone );
+            base_type::operator=( std::move( clone ) );
             return *this;
         }
 
@@ -386,8 +386,8 @@ namespace ptr_container_detail
         { }
         
         template< class PtrContainer >
-        explicit ptr_set_adapter( std::auto_ptr<PtrContainer> clone )
-         : base_type( clone )
+        explicit ptr_set_adapter( std::unique_ptr<PtrContainer> clone )
+         : base_type( std::move( clone ) )
         { }
 
         template< class U, class Set, class CA, bool b >
@@ -398,9 +398,9 @@ namespace ptr_container_detail
         }
 
         template< class T >
-        void operator=( std::auto_ptr<T> r ) 
+        void operator=( std::unique_ptr<T> r ) 
         {
-            base_type::operator=( r );
+            base_type::operator=( std::move( r ) );
         }
 
         std::pair<iterator,bool> insert( key_type* x ) // strong                      
@@ -416,7 +416,7 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        std::pair<iterator,bool> insert( std::auto_ptr<U> x )
+        std::pair<iterator,bool> insert( std::unique_ptr<U> x )
         {
             return insert( x.release() );
         }
@@ -435,7 +435,7 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        iterator insert( iterator where, std::auto_ptr<U> x )
+        iterator insert( iterator where, std::unique_ptr<U> x )
         {
             return insert( where, x.release() );
         }
@@ -586,8 +586,8 @@ namespace ptr_container_detail
         { }
         
         template< class PtrContainer >
-        explicit ptr_multiset_adapter( std::auto_ptr<PtrContainer> clone )
-         : base_type( clone )
+        explicit ptr_multiset_adapter( std::unique_ptr<PtrContainer> clone )
+         : base_type( std::move( clone ) )
         { }
 
         template< class U, class Set, class CA, bool b >
@@ -598,9 +598,9 @@ namespace ptr_container_detail
         }
         
         template< class T >
-        void operator=( std::auto_ptr<T> r ) 
+        void operator=( std::unique_ptr<T> r ) 
         {
-            base_type::operator=( r ); 
+            base_type::operator=( std::move( r ) ); 
         }
 
         iterator insert( iterator before, key_type* x ) // strong  
@@ -609,7 +609,7 @@ namespace ptr_container_detail
         } 
 
         template< class U >
-        iterator insert( iterator before, std::auto_ptr<U> x )
+        iterator insert( iterator before, std::unique_ptr<U> x )
         {
             return insert( before, x.release() );
         }
@@ -626,7 +626,7 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        iterator insert( std::auto_ptr<U> x )
+        iterator insert( std::unique_ptr<U> x )
         {
             return insert( x.release() );
         }

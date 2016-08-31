@@ -303,7 +303,7 @@ that you read it all from top to bottom.</p>
 <li><a class="reference" href="#null-values">Null values</a></li>
 <li><a class="reference" href="#cloneability">Cloneability</a></li>
 <li><a class="reference" href="#new-functions">New functions</a></li>
-<li><a class="reference" href="#std-auto-ptr-u-overloads">std::auto_ptr&lt;U&gt; overloads</a></li>
+<li><a class="reference" href="#std-auto-ptr-u-overloads">std::unique_ptr&lt;U&gt; overloads</a></li>
 <li><a class="reference" href="#algorithms">Algorithms</a></li>
 </ul>
 <div class="section">
@@ -572,7 +572,7 @@ animal* the_animal_ptr = the_animal.release(); // now this is not deleted
 zoo.release(2); // for random access containers
 </pre>
 <p>You can think of <tt class="docutils literal"><span class="pre">auto_type</span></tt> as a non-copyable form of 
-<tt class="docutils literal"><span class="pre">std::auto_ptr</span></tt>. Notice that when you release an object, the
+<tt class="docutils literal"><span class="pre">std::unique_ptr</span></tt>. Notice that when you release an object, the
 pointer is removed from the container and the containers size
 shrinks. For containers that store nulls, we can exploit that
 <tt class="docutils literal"><span class="pre">auto_type</span></tt> is convertible to <tt class="docutils literal"><span class="pre">bool</span></tt>:</p>
@@ -585,7 +585,7 @@ if( ptr_vector&lt; nullable&lt;T&gt; &gt;::auto_type r = vec.pop_back() )
 <p>You can also release the entire container if you
 want to return it from a function</p>
 <pre class="literal-block">
-std::auto_ptr&lt; boost::ptr_deque&lt;animal&gt; &gt; get_zoo()
+std::unique_ptr&lt; boost::ptr_deque&lt;animal&gt; &gt; get_zoo()
 {
     boost::ptr_deque&lt;animal&gt;  result;
     ...
@@ -643,20 +643,20 @@ catch( boost::bad_ptr_container_operation&amp; e )
 </pre>
 </div>
 <div class="section">
-<h1><a id="std-auto-ptr-u-overloads" name="std-auto-ptr-u-overloads"><tt class="docutils literal"><span class="pre">std::auto_ptr&lt;U&gt;</span></tt> overloads</a></h1>
+<h1><a id="std-auto-ptr-u-overloads" name="std-auto-ptr-u-overloads"><tt class="docutils literal"><span class="pre">std::unique_ptr&lt;U&gt;</span></tt> overloads</a></h1>
 <p>Every time there is a function that takes a <tt class="docutils literal"><span class="pre">T*</span></tt> parameter, there is
-also a function taking an <tt class="docutils literal"><span class="pre">std::auto_ptr&lt;U&gt;</span></tt> parameter. This is of course done
-to make the library intregrate seamlessly with <tt class="docutils literal"><span class="pre">std::auto_ptr</span></tt>. For example</p>
+also a function taking an <tt class="docutils literal"><span class="pre">std::unique_ptr&lt;U&gt;</span></tt> parameter. This is of course done
+to make the library intregrate seamlessly with <tt class="docutils literal"><span class="pre">std::unique_ptr</span></tt>. For example</p>
 <pre class="literal-block">
 std::ptr_vector&lt;Base&gt; vec;
 vec.push_back( new Base );
 </pre>
 <p>is complemented by</p>
 <pre class="literal-block">
-std::auto_ptr&lt;Derived&gt; p( new Derived );
+std::unique_ptr&lt;Derived&gt; p( new Derived );
 vec.push_back( p );   
 </pre>
-<p>Notice that the template argument for <tt class="docutils literal"><span class="pre">std::auto_ptr</span></tt> does not need to
+<p>Notice that the template argument for <tt class="docutils literal"><span class="pre">std::unique_ptr</span></tt> does not need to
 follow the template argument for <tt class="docutils literal"><span class="pre">ptr_vector</span></tt> as long as <tt class="docutils literal"><span class="pre">Derived*</span></tt>
 can be implicitly converted to <tt class="docutils literal"><span class="pre">Base*</span></tt>.</p>
 </div>

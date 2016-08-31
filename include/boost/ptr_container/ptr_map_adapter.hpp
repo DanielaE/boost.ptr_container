@@ -267,14 +267,14 @@ namespace ptr_container_detail
         { }
                 
         template< class PtrContainer >
-        explicit ptr_map_adapter_base( std::auto_ptr<PtrContainer> clone ) 
-        : base_type( clone )
+        explicit ptr_map_adapter_base( std::unique_ptr<PtrContainer> clone ) 
+        : base_type( std::move( clone ) )
         { }
         
         template< typename PtrContainer >
-        ptr_map_adapter_base& operator=( std::auto_ptr<PtrContainer> clone )    
+        ptr_map_adapter_base& operator=( std::unique_ptr<PtrContainer> clone )    
         {
-            base_type::operator=( clone );
+            base_type::operator=( std::move( clone ) );
             return *this;
         }        
 
@@ -363,7 +363,7 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        auto_type replace( iterator where, std::auto_ptr<U> x )
+        auto_type replace( iterator where, std::unique_ptr<U> x )
         {
             return replace( where, x.release() );
         }
@@ -493,7 +493,7 @@ namespace ptr_container_detail
         }
         
         template< class U >
-        ptr_map_adapter( std::auto_ptr<U> r ) : base_type( r )
+        ptr_map_adapter( std::unique_ptr<U> r ) : base_type( std::move( r ) )
         { }
 
         ptr_map_adapter& operator=( ptr_map_adapter r )
@@ -503,9 +503,9 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        ptr_map_adapter& operator=( std::auto_ptr<U> r )
+        ptr_map_adapter& operator=( std::unique_ptr<U> r )
         {  
-            base_type::operator=( r );
+            base_type::operator=( std::move( r ) );
             return *this;
         }
 
@@ -556,7 +556,7 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        std::pair<iterator,bool> insert( const key_type& key, std::auto_ptr<U> x )
+        std::pair<iterator,bool> insert( const key_type& key, std::unique_ptr<U> x )
         {
             return insert_impl( key, x.release() );
         }
@@ -583,7 +583,7 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        iterator insert( iterator before, const key_type& key, std::auto_ptr<U> x ) // strong
+        iterator insert( iterator before, const key_type& key, std::unique_ptr<U> x ) // strong
         {
             return insert_impl( before, key, x.release() );
         }
@@ -742,7 +742,7 @@ namespace ptr_container_detail
         }
         
         template< class U >
-        explicit ptr_multimap_adapter( std::auto_ptr<U> r ) : base_type( r )
+        explicit ptr_multimap_adapter( std::unique_ptr<U> r ) : base_type( std::move( r ) )
         { }
 
         ptr_multimap_adapter& operator=( ptr_multimap_adapter r )
@@ -752,9 +752,9 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        ptr_multimap_adapter& operator=( std::auto_ptr<U> r )
+        ptr_multimap_adapter& operator=( std::unique_ptr<U> r )
         {  
-            base_type::operator=( r );
+            base_type::operator=( std::move( r ) );
             return *this;
         }
 
@@ -805,7 +805,7 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        iterator insert( const key_type& key, std::auto_ptr<U> x )
+        iterator insert( const key_type& key, std::unique_ptr<U> x )
         {
             return insert_impl( key, x.release() );
         }
@@ -826,7 +826,7 @@ namespace ptr_container_detail
         }
 
         template< class U >
-        iterator insert( iterator before, const key_type& key, std::auto_ptr<U> x ) // strong
+        iterator insert( iterator before, const key_type& key, std::unique_ptr<U> x ) // strong
         {
             return insert_impl( before, key, x.release() );
         }

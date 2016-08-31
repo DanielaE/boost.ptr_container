@@ -104,8 +104,8 @@ namespace ptr_container_detail
         { }
         
         template< class PtrContainer >
-        explicit associative_ptr_container( std::auto_ptr<PtrContainer> r )
-         : base_type( r )
+        explicit associative_ptr_container( std::unique_ptr<PtrContainer> r )
+         : base_type( std::move( r ) )
         { }
 
         associative_ptr_container( const associative_ptr_container& r )
@@ -118,9 +118,9 @@ namespace ptr_container_detail
         { }
         
         template< class PtrContainer >
-        associative_ptr_container& operator=( std::auto_ptr<PtrContainer> r ) // nothrow
+        associative_ptr_container& operator=( std::unique_ptr<PtrContainer> r ) // nothrow
         {
-           base_type::operator=( r );
+           base_type::operator=( std::move( r ) );
            return *this;
         }
         

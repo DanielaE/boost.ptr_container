@@ -354,7 +354,7 @@ namespace boost
         explicit reversible_ptr_container( const reversible_ptr_container&amp; r );                
         template&lt; class Derived &gt;
         explicit reversible_ptr_container( const reversible_ptr_container&lt;Derived&gt;&amp; r );
-        explicit reversible_ptr_container( std::auto_ptr&lt;reversible_ptr_container&gt; r );
+        explicit reversible_ptr_container( std::unique_ptr&lt;reversible_ptr_container&gt; r );
         template&lt; class InputIterator &gt;
         reversible_ptr_container( InputIterator first, InputIterator last );
         
@@ -363,7 +363,7 @@ namespace boost
         reversible_ptr_container&amp;  operator=( const reversible_ptr_container&amp; r );
         template&lt;class Derived&gt;
         reversible_ptr_container&amp;  operator=( const reversible_ptr_container&lt;Derived&gt;&amp; r );
-        reversible_ptr_container&amp;  operator=( std::auto_ptr&lt;reversible_ptr_container&gt; r );
+        reversible_ptr_container&amp;  operator=( std::unique_ptr&lt;reversible_ptr_container&gt; r );
         allocator_type             get_allocator() const;                                      
     
     public: // <a class="reference" href="#iterators">iterators</a>
@@ -390,9 +390,9 @@ namespace boost
     public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
         auto_type                                replace( iterator position, T* x );
         template&lt; class U &gt;
-        auto_type                                replace( iterator position, std::auto_ptr&lt;U&gt; x );    
-        std::auto_ptr&lt;reversible_ptr_container&gt;  clone() const;    
-        std::auto_ptr&lt;reversible_ptr_container&gt;  release();
+        auto_type                                replace( iterator position, std::unique_ptr&lt;U&gt; x );    
+        std::unique_ptr&lt;reversible_ptr_container&gt;  clone() const;    
+        std::unique_ptr&lt;reversible_ptr_container&gt;  release();
         auto_type                                release( iterator position );
                     
     }; //  class 'reversible_ptr_container'
@@ -495,8 +495,8 @@ T* release();
 operator <em>implementation-defined bool</em>();
 </pre>
 <p>The destructor will delete the stored object <em>using the clone allocator of the container</em>
-(this explains why we cannot use <tt class="docutils literal"><span class="pre">std::auto_ptr&lt;T&gt;</span></tt>). It might help to
-think it is just an <tt class="docutils literal"><span class="pre">std::auto_ptr&lt;T&gt;</span></tt>. You can also return
+(this explains why we cannot use <tt class="docutils literal"><span class="pre">std::unique_ptr&lt;T&gt;</span></tt>). It might help to
+think it is just an <tt class="docutils literal"><span class="pre">std::unique_ptr&lt;T&gt;</span></tt>. You can also return
 the pointer from a function or assign it to another pointer via the <tt class="docutils literal"><span class="pre">move()</span></tt>
 function</p>
 <pre class="literal-block">
@@ -538,7 +538,7 @@ return boost::ptr_container::move( other );
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">explicit</span> <span class="pre">reversible_ptr_container(</span> <span class="pre">std::auto_ptr&lt;</span> <span class="pre">reversible_ptr_container</span> <span class="pre">&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">explicit</span> <span class="pre">reversible_ptr_container(</span> <span class="pre">std::unique_ptr&lt;</span> <span class="pre">reversible_ptr_container</span> <span class="pre">&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: Constructs a container by taking ownership of the supplied pointers</li>
@@ -580,7 +580,7 @@ return boost::ptr_container::move( other );
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">reversible_ptr_container&amp;</span> <span class="pre">operator=(</span> <span class="pre">std::auto_ptr&lt;reversible_ptr_container&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">reversible_ptr_container&amp;</span> <span class="pre">operator=(</span> <span class="pre">std::unique_ptr&lt;reversible_ptr_container&gt;</span> <span class="pre">r</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: Deletes the stored objects and then takes ownership of the supplied pointers</li>
@@ -716,14 +716,14 @@ return boost::ptr_container::move( other );
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">std::auto_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">auto_type</span> <span class="pre">replace(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">std::unique_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">replace(</span> <span class="pre">position,</span> <span class="pre">x.release()</span> <span class="pre">);</span></tt></li>
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">std::auto_ptr&lt;</span> <span class="pre">reversible_ptr_container</span> <span class="pre">&gt;</span> <span class="pre">clone()</span> <span class="pre">const;</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">std::unique_ptr&lt;</span> <span class="pre">reversible_ptr_container</span> <span class="pre">&gt;</span> <span class="pre">clone()</span> <span class="pre">const;</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: Returns a deep copy of the container</li>
@@ -732,7 +732,7 @@ return boost::ptr_container::move( other );
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">std::auto_ptr&lt;</span> <span class="pre">reversible_ptr_container</span> <span class="pre">&gt;</span> <span class="pre">release();</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">std::unique_ptr&lt;</span> <span class="pre">reversible_ptr_container</span> <span class="pre">&gt;</span> <span class="pre">release();</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: Releases ownership of the container. This is a useful way of returning a container from a function.</li>

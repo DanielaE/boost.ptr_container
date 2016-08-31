@@ -334,7 +334,7 @@ namespace boost
     public: // <a class="reference" href="#modifiers">modifiers</a>         
         std::pair&lt;iterator,bool&gt;  insert( Key* x );   
         template&lt; class Key2 &gt;
-        std::pair&lt;iterator,bool&gt;  insert( std::auto_ptr&lt;Key2&gt; x );                            
+        std::pair&lt;iterator,bool&gt;  insert( std::unique_ptr&lt;Key2&gt; x );                            
 
     public: // <a class="reference" href="#pointer-container-requirements">pointer container requirements</a>
         bool      transfer( iterator object, ptr_set_adapter&amp; from );
@@ -363,7 +363,7 @@ namespace boost
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Key2</span> <span class="pre">&gt;</span> <span class="pre">std::pair&lt;iterator,bool&gt;</span>&nbsp; <span class="pre">insert(</span> <span class="pre">std::auto_ptr&lt;Key2&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">Key2</span> <span class="pre">&gt;</span> <span class="pre">std::pair&lt;iterator,bool&gt;</span>&nbsp; <span class="pre">insert(</span> <span class="pre">std::unique_ptr&lt;Key2&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">insert(</span> <span class="pre">x.release()</span> <span class="pre">);</span></tt></li>
