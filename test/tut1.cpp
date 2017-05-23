@@ -141,6 +141,12 @@ class farm
     typedef boost::ptr_deque<animal> barn_type;
     barn_type                        barn;
 
+#if !defined( BOOST_NO_CXX11_SMART_PTR )
+    typedef barn_type&& raii_ptr;
+#elif !BOOST_PTR_CONTAINER_NO_AUTO_PTR
+    typedef std::auto_ptr<barn_type> raii_ptr;
+#endif
+
     //
     // An error type
     //
@@ -244,7 +250,7 @@ public:
     //
     // If things are bad, we might choose to sell all animals :-(
     //
-    std::auto_ptr<barn_type> sell_farm()
+    raii_ptr sell_farm()
     {
         return barn.release();
     }
@@ -254,24 +260,34 @@ public:
     // else's farm :-)
     //
 
-    void buy_farm( std::auto_ptr<barn_type> other )
+    void buy_farm( raii_ptr other )
     {
         //
         // This line inserts all the animals from 'other'
         // and is guaranteed either to succeed or to have no
         // effect
         //
+#if !defined( BOOST_NO_CXX11_SMART_PTR )
+        barn.transfer( barn.end(), // insert new animals at the end
+                         other );      // we want to transfer all animals,
+                                       // so we use the whole container as argument
+#else
         barn.transfer( barn.end(), // insert new animals at the end
                          *other );     // we want to transfer all animals,
                                        // so we use the whole container as argument
-        //
+#endif
+	   //
         // You might think you would have to do
         //
         // other.release();
         //
         // but '*other' is empty and can go out of scope as it wants
         //
+#if !defined( BOOST_NO_CXX11_SMART_PTR )
+        BOOST_ASSERT( other.empty() );
+#else
         BOOST_ASSERT( other->empty() );
+#endif
     }
     
 }; // class 'farm'.

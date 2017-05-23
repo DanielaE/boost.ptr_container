@@ -69,7 +69,7 @@ namespace boost
                                                       base_type,
                                                       this_type )
         
-        BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( ptr_set, base_type )
+        BOOST_PTR_CONTAINER_DEFINE_COPY_AND_MOVE_CONSTRUCTORS( ptr_set, base_type )
                 
     };
         
@@ -118,8 +118,8 @@ namespace boost
                                                       base_type,
                                                       this_type )
         
-        BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( ptr_multiset, 
-                                                      base_type )     
+        BOOST_PTR_CONTAINER_DEFINE_COPY_AND_MOVE_CONSTRUCTORS( ptr_multiset, 
+                                                               base_type )     
 
     };
 

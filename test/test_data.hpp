@@ -21,6 +21,14 @@
 #include <utility>
 #include <cstdlib>
 
+#ifndef BOOST_PTR_CONTAINER_TEST_NO_AUTO_PTR
+# if defined(BOOST_NO_AUTO_PTR) || BOOST_PTR_CONTAINER_NO_AUTO_PTR
+#  define BOOST_PTR_CONTAINER_TEST_NO_AUTO_PTR 1
+# else
+#  define BOOST_PTR_CONTAINER_TEST_NO_AUTO_PTR 0
+# endif
+#endif
+
 using namespace std;
 using namespace boost;
 

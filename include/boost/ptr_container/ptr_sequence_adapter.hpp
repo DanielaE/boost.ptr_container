@@ -219,24 +219,52 @@ namespace ptr_container_detail
           : base_type( r, tag )
         { }
         
+#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR
         template< class PtrContainer >
         explicit ptr_sequence_adapter( std::auto_ptr<PtrContainer> clone )
           : base_type( clone )
         { }
 
-        ptr_sequence_adapter& operator=( const ptr_sequence_adapter r )
-        {
-            this->swap( r );
-            return *this; 
-        }
-        
         template< class PtrContainer >
         ptr_sequence_adapter& operator=( std::auto_ptr<PtrContainer> clone )    
         {
             base_type::operator=( clone );
             return *this;
         }
+#endif
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+        template< class PtrContainer >
+        explicit ptr_sequence_adapter( PtrContainer&& clone )
+          : base_type( std::move( clone ) )
+        { }
 
+        template< class PtrContainer >
+        ptr_sequence_adapter& operator=( PtrContainer&& clone )    
+        {
+            base_type::operator=( std::move( clone ) );
+            return *this;
+        }
+
+        ptr_sequence_adapter& operator=( ptr_sequence_adapter&& r )
+        {
+            base_type::operator=( std::move( r ) );
+            return *this; 
+        }
+
+        ptr_sequence_adapter& operator=( const ptr_sequence_adapter& r )
+        {
+            ptr_sequence_adapter temp( r );
+            this->swap( temp );
+            return *this; 
+        }
+#else
+        ptr_sequence_adapter& operator=( const ptr_sequence_adapter r )
+        {
+            this->swap( r );
+            return *this; 
+        }
+#endif
+        
         /////////////////////////////////////////////////////////////
         // modifiers
         /////////////////////////////////////////////////////////////
@@ -249,11 +277,20 @@ namespace ptr_container_detail
             ptr.release();                // nothrow
         }
 
+#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR
         template< class U >
         void push_back( std::auto_ptr<U> x )
         {
             push_back( x.release() );
         }
+#endif
+#ifndef BOOST_NO_CXX11_SMART_PTR
+        template< class U >
+        void push_back( std::unique_ptr<U> x )
+        {
+            push_back( x.release() );
+        }
+#endif
         
         void push_front( value_type x )                
         {
@@ -263,11 +300,20 @@ namespace ptr_container_detail
             ptr.release();                // nothrow
         }
 
+#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR
         template< class U >
         void push_front( std::auto_ptr<U> x )
         {
             push_front( x.release() );
         }
+#endif
+#ifndef BOOST_NO_CXX11_SMART_PTR
+        template< class U >
+        void push_front( std::unique_ptr<U> x )
+        {
+            push_front( x.release() );
+        }
+#endif
 
         auto_type pop_back()
         {

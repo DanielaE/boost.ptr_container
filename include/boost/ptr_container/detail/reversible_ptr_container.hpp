@@ -39,6 +39,14 @@
 #include <typeinfo>
 #include <memory>
 
+#ifndef BOOST_PTR_CONTAINER_NO_AUTO_PTR
+# ifdef BOOST_NO_AUTO_PTR
+#  define BOOST_PTR_CONTAINER_NO_AUTO_PTR 1
+# else
+#  define BOOST_PTR_CONTAINER_NO_AUTO_PTR 0
+# endif
+#endif
+
 #if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)  
 #pragma warning(push)  
 #pragma warning(disable:4127)
@@ -345,12 +353,21 @@ namespace ptr_container_detail
         explicit reversible_ptr_container( const allocator_type& a ) 
          : c_( a )
         { }
-        
+
+#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR        
         template< class PtrContainer >
         explicit reversible_ptr_container( std::auto_ptr<PtrContainer> clone )                
         { 
             swap( *clone ); 
         }
+#endif
+#ifndef BOOST_NO_CXX11_SMART_PTR
+        template< class PtrContainer >
+        explicit reversible_ptr_container( std::unique_ptr<PtrContainer> clone )                
+        { 
+            swap( *clone ); 
+        }
+#endif
 
         reversible_ptr_container( const reversible_ptr_container& r ) 
         {
@@ -363,12 +380,22 @@ namespace ptr_container_detail
             constructor_impl( r.begin(), r.end(), std::forward_iterator_tag() ); 
         }
 
+#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR        
         template< class PtrContainer >
         reversible_ptr_container& operator=( std::auto_ptr<PtrContainer> clone ) // nothrow
         {
             swap( *clone );
             return *this;
         }
+#endif
+#ifndef BOOST_NO_CXX11_SMART_PTR
+        template< class PtrContainer >
+        reversible_ptr_container& operator=( std::unique_ptr<PtrContainer> clone ) // nothrow
+        {
+            swap( *clone );
+            return *this;
+        }
+#endif
 
         reversible_ptr_container& operator=( reversible_ptr_container r ) // strong 
         {
@@ -588,11 +615,20 @@ namespace ptr_container_detail
             return res;
         }
 
+#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR        
         template< class U >
         iterator insert( iterator before, std::auto_ptr<U> x )
         {
             return insert( before, x.release() );
         }
+#endif
+#ifndef BOOST_NO_CXX11_SMART_PTR
+        template< class U >
+        iterator insert( iterator before, std::unique_ptr<U> x )
+        {
+            return insert( before, x.release() );
+        }
+#endif
 
         iterator erase( iterator x ) // nothrow
         {
@@ -650,11 +686,20 @@ namespace ptr_container_detail
             return boost::ptr_container_detail::move( old );
         }
 
+#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR        
         template< class U >
         auto_type replace( iterator where, std::auto_ptr<U> x )
         {
             return replace( where, x.release() ); 
         }
+#endif
+#ifndef BOOST_NO_CXX11_SMART_PTR
+        template< class U >
+        auto_type replace( iterator where, std::unique_ptr<U> x )
+        {
+            return replace( where, x.release() ); 
+        }
+#endif
 
         auto_type replace( size_type idx, Ty_* x ) // strong
         {
@@ -669,11 +714,20 @@ namespace ptr_container_detail
             return boost::ptr_container_detail::move( old );
         } 
 
+#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR        
         template< class U >
         auto_type replace( size_type idx, std::auto_ptr<U> x )
         {
             return replace( idx, x.release() );
         }
+#endif
+#ifndef BOOST_NO_CXX11_SMART_PTR
+        template< class U >
+        auto_type replace( size_type idx, std::unique_ptr<U> x )
+        {
+            return replace( idx, x.release() );
+        }
+#endif
                 
     }; // 'reversible_ptr_container'
 
@@ -689,12 +743,9 @@ namespace ptr_container_detail
 #define BOOST_PTR_CONTAINER_DEFINE_RELEASE( base_type ) \
     using base_type::release;
 #endif
-    
-    //
-    // two-phase lookup of template functions 
-    // is buggy on most compilers, so we use a macro instead
-    //
-#define BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type ) \
+
+#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR        
+#define BOOST_PTR_CONTAINER_COPY_AND_ASSIGN_AUTO( PC, base_type, this_type ) \
     explicit PC( std::auto_ptr<this_type> r )       \
     : base_type ( r ) { }                           \
                                                     \
@@ -702,32 +753,103 @@ namespace ptr_container_detail
     {                                               \
         base_type::operator=( r );                  \
         return *this;                               \
-    }                                               \
-                                                    \
+    }
+#else
+#define BOOST_PTR_CONTAINER_COPY_AND_ASSIGN_AUTO( PC, base_type, this_type )
+#endif
+
+#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR        
+#define BOOST_PTR_CONTAINER_RELEASE_AND_CLONE( this_type ) \
     std::auto_ptr<this_type> release()              \
     {                                               \
       std::auto_ptr<this_type> ptr( new this_type );\
       this->swap( *ptr );                           \
       return ptr;                                   \
     }                                               \
-    BOOST_PTR_CONTAINER_DEFINE_RELEASE( base_type ) \
                                                     \
     std::auto_ptr<this_type> clone() const          \
     {                                               \
        return std::auto_ptr<this_type>( new this_type( this->begin(), this->end() ) ); \
     }
+#elif !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
+#define BOOST_PTR_CONTAINER_RELEASE_AND_CLONE( this_type ) \
+    this_type&& release()                              \
+    {                                                  \
+      return std::move(*this);                         \
+    }                                                  \
+                                                       \
+    this_type clone() const                            \
+    {                                                  \
+       return this_type( this->begin(), this->end() ); \
+    }
+#else
+#define BOOST_PTR_CONTAINER_RELEASE_AND_CLONE( this_type )
+#endif
+    
+    //
+    // two-phase lookup of template functions 
+    // is buggy on most compilers, so we use a macro instead
+    //
+#define BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type )  \
+    BOOST_PTR_CONTAINER_COPY_AND_ASSIGN_AUTO( PC, base_type, this_type ) \
+    BOOST_PTR_CONTAINER_RELEASE_AND_CLONE( this_type )                   \
+    BOOST_PTR_CONTAINER_DEFINE_RELEASE( base_type )
 
-#define BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( PC, base_type ) \
-                                                                      \
-    template< class U >                                               \
-    PC( const PC<U>& r ) : base_type( r ) { }                         \
-                                                                      \
-    PC& operator=( PC r )                                             \
-    {                                                                 \
-        this->swap( r );                                              \
-        return *this;                                                 \
-    }                                                                 \
-                                                                           
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
+#ifndef BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
+#define BOOST_PTR_CONTAINER_DEFINE_COPY_AND_MOVE_CONSTRUCTORS( PC, base_type ) \
+                                                \
+    template< class U >                         \
+    PC( const PC<U>& r ) : base_type( r ) { }   \
+                                                \
+    template< class U >                         \
+    PC( PC<U>&& r ) BOOST_NOEXCEPT_OR_NOTHROW   \
+    : base_type( std::move( r ) ) { }           \
+                                                \
+    PC( const PC& ) = default;                  \
+    PC( PC&& ) = default;                       \
+    PC& operator=( const PC& ) = default;       \
+    PC& operator=( PC&& ) = default;
+#else
+#define BOOST_PTR_CONTAINER_DEFINE_COPY_AND_MOVE_CONSTRUCTORS( PC, base_type ) \
+                                                \
+    template< class U >                         \
+    PC( const PC<U>& r ) : base_type( r ) { }   \
+                                                \
+    template< class U >                         \
+    PC( PC<U>&& r ) BOOST_NOEXCEPT_OR_NOTHROW   \
+    : base_type( std::move( r ) ) { }           \
+                                                \
+    PC( const PC& r ) : base_type( r ) { }      \
+                                                \
+    PC( PC&& r ) BOOST_NOEXCEPT_OR_NOTHROW      \
+    : base_type ( std::move( r ) ) { }          \
+                                                \
+    PC& operator=( const PC& r )                \
+    {                                           \
+        const PC temp( r );                     \
+        this->swap( PC( temp ) );               \
+        return *this;                           \
+    }                                           \
+                                                \
+    PC& operator=( PC&& r ) BOOST_NOEXCEPT_OR_NOTHROW \
+    {                                           \
+        base_type::operator=( std::move( r ) ); \
+        return *this;                           \
+    }
+#endif
+#else                                                                           
+#define BOOST_PTR_CONTAINER_DEFINE_COPY_AND_MOVE_CONSTRUCTORS( PC, base_type ) \
+                                                \
+    template< class U >                         \
+    PC( const PC<U>& r ) : base_type( r ) { }   \
+                                                \
+    PC& operator=( PC r )                       \
+    {                                           \
+        this->swap( r );                        \
+        return *this;                           \
+    }
+#endif                                                                           
 
 #define BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                       \
     typedef BOOST_DEDUCED_TYPENAME base_type::iterator        iterator;                \
@@ -746,9 +868,9 @@ namespace ptr_container_detail
    BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( PC, base_type )                                    \
    BOOST_PTR_CONTAINER_DEFINE_RELEASE_AND_CLONE( PC, base_type, this_type )
 
-#define BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( PC, base_type, this_type )  \
-    BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( PC, base_type, this_type )  \
-    BOOST_PTR_CONTAINER_DEFINE_COPY_CONSTRUCTORS( PC, base_type )
+#define BOOST_PTR_CONTAINER_DEFINE_SEQEUENCE_MEMBERS( PC, base_type, this_type ) \
+    BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( PC, base_type, this_type ) \
+    BOOST_PTR_CONTAINER_DEFINE_COPY_AND_MOVE_CONSTRUCTORS( PC, base_type )
 
 } // namespace 'ptr_container_detail'
 
