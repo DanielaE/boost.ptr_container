@@ -11,40 +11,45 @@
 
 #define PTR_LIST_TEST 1
 #define PTR_CONTAINER_DEBUG 0
-        
+
 #include <boost/test/unit_test.hpp>
 #include "sequence_test_data.hpp"
 #include <boost/ptr_container/ptr_list.hpp>
 
 void test_list()
 {
-    
+
     reversible_container_test< ptr_list<Base>, Base, Derived_class >();
     reversible_container_test< ptr_list<Value>, Value, Value >();
     reversible_container_test< ptr_list< nullable<Base> >, Base, Derived_class >();
     reversible_container_test< ptr_list< nullable<Value> >, Value, Value >();
 
-    container_assignment_test< ptr_list<Base>, ptr_list<Derived_class>, 
+    container_assignment_test< ptr_list<Base>, ptr_list<Derived_class>,
                                Derived_class>();
-    container_assignment_test< ptr_list< nullable<Base> >, 
-                               ptr_list< nullable<Derived_class> >, 
+    container_assignment_test< ptr_list< nullable<Base> >,
+                               ptr_list< nullable<Derived_class> >,
                                Derived_class>();
-    container_assignment_test< ptr_list< nullable<Base> >, 
-                               ptr_list<Derived_class>, 
+    container_assignment_test< ptr_list< nullable<Base> >,
+                               ptr_list<Derived_class>,
                                Derived_class>();
-    container_assignment_test< ptr_list<Base>, 
-                               ptr_list< nullable<Derived_class> >, 
-                               Derived_class>();                           
+    container_assignment_test< ptr_list<Base>,
+                               ptr_list< nullable<Derived_class> >,
+                               Derived_class>();
 
     test_transfer< ptr_list<Derived_class>, ptr_list<Base>, Derived_class>();
-      
+
     random_access_algorithms_test< ptr_list<int> >();
     ptr_list<int> list;
     list.push_back( new int(0) );
     list.push_back( new int(2) );
     list.push_back( new int(1) );
     list.push_front( new int(3) );
+#if !BOOST_PTR_CONTAINER_TEST_NO_AUTO_PTR
     list.push_front( std::auto_ptr<int>( new int(42) ) );
+#endif
+#ifndef BOOST_NO_CXX11_SMART_PTR
+    list.push_front( std::unique_ptr<int>( new int(43) ) );
+#endif
     list.reverse();
 }
 
