@@ -372,7 +372,7 @@ containers without cloning the objects again (see <a class="reference" href="exa
 <div class="section">
 <h1><a class="toc-backref" href="#id11" id="a-container-can-be-cheaply-returned-from-functions-either-by-making-a-clone-or-by-giving-up-ownership-of-the-container" name="a-container-can-be-cheaply-returned-from-functions-either-by-making-a-clone-or-by-giving-up-ownership-of-the-container">A container can be cheaply returned from functions either by making a clone or by giving up ownership of the container</a></h1>
 <p>Two special member functions, <tt class="docutils literal"><span class="pre">clone()</span></tt> and <tt class="docutils literal"><span class="pre">release()</span></tt>, both return an 
-<tt class="docutils literal"><span class="pre">auto_ptr&lt;SmartContainer&gt;</span></tt> which can be assigned to another pointer container.  This 
+<tt class="docutils literal"><span class="pre">unique_ptr&lt;SmartContainer&gt;</span></tt> which can be assigned to another pointer container.  This 
 effectively reduces the cost of returning a container to one 
 heap-allocation plus a call to <tt class="docutils literal"><span class="pre">swap()</span></tt> (see <a class="reference" href="examples.html">Example 3</a>).</p>
 </div>

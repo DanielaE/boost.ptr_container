@@ -346,11 +346,11 @@ namespace boost
     public: // <a class="reference" href="#modifiers">modifiers</a>
         void      push_back( T* x );
         template&lt; class U &gt;
-        void      push_back( std::auto_ptr&lt;U&gt; x );
+        void      push_back( std::unique_ptr&lt;U&gt; x );
         auto_type pop_back();
         iterator  insert( iterator position, T* x );
         template&lt; class U &gt;
-        iterator  insert( iterator position, std::auto_ptr&lt;U&gt; x );
+        iterator  insert( iterator position, std::unique_ptr&lt;U&gt; x );
         template&lt; class InputIterator &gt;
         void      insert( iterator position, InputIterator first, InputIterator last );
         template&lt; class InputRange &gt;
@@ -509,7 +509,7 @@ Exception safety: Strong guarantee -->
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">push_back(</span> <span class="pre">std::auto_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">void</span> <span class="pre">push_back(</span> <span class="pre">std::unique_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">push_back(</span> <span class="pre">x.release()</span> <span class="pre">);</span></tt></li>
@@ -545,7 +545,7 @@ Exception safety: Strong guarantee -->
 </ul>
 </blockquote>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">iterator</span> <span class="pre">insert(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">std::auto_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">template&lt;</span> <span class="pre">class</span> <span class="pre">U</span> <span class="pre">&gt;</span> <span class="pre">iterator</span> <span class="pre">insert(</span> <span class="pre">iterator</span> <span class="pre">position,</span> <span class="pre">std::unique_ptr&lt;U&gt;</span> <span class="pre">x</span> <span class="pre">);</span></tt></p>
 <blockquote>
 <ul class="simple">
 <li>Effects: <tt class="docutils literal"><span class="pre">return</span> <span class="pre">insert(</span> <span class="pre">position,</span> <span class="pre">x.release()</span> <span class="pre">);</span></tt></li>
