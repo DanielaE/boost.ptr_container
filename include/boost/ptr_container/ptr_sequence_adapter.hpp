@@ -234,18 +234,18 @@ namespace ptr_container_detail
 #endif
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
         template< class PtrContainer >
-        explicit ptr_sequence_adapter( PtrContainer&& clone )
+        explicit ptr_sequence_adapter( PtrContainer&& clone ) BOOST_NOEXCEPT_OR_NOTHROW
           : base_type( std::move( clone ) )
         { }
 
         template< class PtrContainer >
-        ptr_sequence_adapter& operator=( PtrContainer&& clone )    
+        ptr_sequence_adapter& operator=( PtrContainer&& clone ) BOOST_NOEXCEPT_OR_NOTHROW   
         {
             base_type::operator=( std::move( clone ) );
             return *this;
         }
 
-        ptr_sequence_adapter& operator=( ptr_sequence_adapter&& r )
+        ptr_sequence_adapter& operator=( ptr_sequence_adapter&& r ) BOOST_NOEXCEPT_OR_NOTHROW
         {
             base_type::operator=( std::move( r ) );
             return *this; 
@@ -258,7 +258,7 @@ namespace ptr_container_detail
             return *this; 
         }
 #else
-        ptr_sequence_adapter& operator=( const ptr_sequence_adapter r )
+        ptr_sequence_adapter& operator=( const ptr_sequence_adapter r ) BOOST_NOEXCEPT_OR_NOTHROW
         {
             this->swap( r );
             return *this; 

@@ -108,14 +108,27 @@ namespace ptr_container_detail
         explicit associative_ptr_container( std::auto_ptr<PtrContainer> r )
          : base_type( r )
         { }
-#endif
-#ifndef BOOST_NO_CXX11_SMART_PTR
+
         template< class PtrContainer >
-        explicit associative_ptr_container( std::unique_ptr<PtrContainer> r )
+        associative_ptr_container& operator=( std::auto_ptr<PtrContainer> r ) // nothrow
+        {
+           base_type::operator=( r );
+           return *this;
+        }
+#endif
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+        template< class PtrContainer >
+        explicit associative_ptr_container( PtrContainer&& r ) BOOST_NOEXCEPT_OR_NOTHROW
          : base_type( std::move( r ) )
         { }
+        
+        template< class PtrContainer >
+        associative_ptr_container& operator=( PtrContainer&& r ) BOOST_NOEXCEPT_OR_NOTHROW
+        {
+           base_type::operator=( std::move( r ) );
+           return *this;
+        }
 #endif
-
         associative_ptr_container( const associative_ptr_container& r )
          : base_type( r.begin(), r.end(), container_type() )
         { }
@@ -124,29 +137,36 @@ namespace ptr_container_detail
         associative_ptr_container( const associative_ptr_container<C,V>& r )
          : base_type( r.begin(), r.end(), container_type() )
         { }
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+        associative_ptr_container( associative_ptr_container&& r ) BOOST_NOEXCEPT_OR_NOTHROW
+         : base_type( std::move( r ) )
+        { }
         
-#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR        
-        template< class PtrContainer >
-        associative_ptr_container& operator=( std::auto_ptr<PtrContainer> r ) // nothrow
+        template< class C, class V >
+        associative_ptr_container( associative_ptr_container<C,V>&& r ) BOOST_NOEXCEPT_OR_NOTHROW
+         : base_type( std::move( r ) )
+        { }
+
+        associative_ptr_container& operator=( const associative_ptr_container& r ) // strong
         {
-           base_type::operator=( r );
-           return *this;
+           const associative_ptr_container temp( r );
+           this->swap( temp );
+           return *this;   
         }
-#endif
-#ifndef BOOST_NO_CXX11_SMART_PTR
-        template< class PtrContainer >
-        associative_ptr_container& operator=( std::unique_ptr<PtrContainer> r ) // nothrow
+
+        associative_ptr_container& operator=( associative_ptr_container&& r ) BOOST_NOEXCEPT_OR_NOTHROW
         {
            base_type::operator=( std::move( r ) );
-           return *this;
+           return *this;   
         }
-#endif
-        
+#else
         associative_ptr_container& operator=( associative_ptr_container r ) // strong
         {
            this->swap( r );
            return *this;   
         }
+#endif
 
     public: // associative container interface
         key_compare key_comp() const

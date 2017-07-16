@@ -360,12 +360,26 @@ namespace ptr_container_detail
         { 
             swap( *clone ); 
         }
-#endif
-#ifndef BOOST_NO_CXX11_SMART_PTR
+
         template< class PtrContainer >
-        explicit reversible_ptr_container( std::unique_ptr<PtrContainer> clone )                
+        reversible_ptr_container& operator=( std::auto_ptr<PtrContainer> clone ) // nothrow
+        {
+            swap( *clone );
+            return *this;
+        }
+#endif
+#if 0 //ndef BOOST_NO_CXX11_RVALUE_REFERENCES
+        template< class PtrContainer >
+        explicit reversible_ptr_container( PtrContainer&& clone ) BOOST_NOEXCEPT_OR_NOTHROW                
         { 
-            swap( *clone ); 
+            swap( static_cast< reversible_ptr_container& >( clone ) );
+        }
+
+        template< class PtrContainer >
+        reversible_ptr_container& operator=( PtrContainer&& clone ) BOOST_NOEXCEPT_OR_NOTHROW
+        {
+            swap( static_cast< reversible_ptr_container& >( clone ) );
+            return *this;
         }
 #endif
 
@@ -380,23 +394,32 @@ namespace ptr_container_detail
             constructor_impl( r.begin(), r.end(), std::forward_iterator_tag() ); 
         }
 
-#if !BOOST_PTR_CONTAINER_NO_AUTO_PTR        
-        template< class PtrContainer >
-        reversible_ptr_container& operator=( std::auto_ptr<PtrContainer> clone ) // nothrow
-        {
-            swap( *clone );
-            return *this;
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+        reversible_ptr_container( reversible_ptr_container&& r ) BOOST_NOEXCEPT_OR_NOTHROW 
+        { 
+            swap( r );
         }
-#endif
-#ifndef BOOST_NO_CXX11_SMART_PTR
-        template< class PtrContainer >
-        reversible_ptr_container& operator=( std::unique_ptr<PtrContainer> clone ) // nothrow
-        {
-            swap( *clone );
-            return *this;
-        }
-#endif
 
+        template< class C, class V >
+        reversible_ptr_container( reversible_ptr_container<C,V>&& r ) BOOST_NOEXCEPT_OR_NOTHROW
+        { 
+            swap( r );
+        }
+#endif
+#if 0
+        reversible_ptr_container& operator=( const reversible_ptr_container& r ) // strong 
+        {
+            const reversible_ptr_container temp( r );
+            swap( temp );
+            return *this;
+        }
+
+        reversible_ptr_container& operator=( reversible_ptr_container&& r ) BOOST_NOEXCEPT_OR_NOTHROW
+        {
+            c_ = std::move( r );
+            return *this;
+        }
+#endif
         reversible_ptr_container& operator=( reversible_ptr_container r ) // strong 
         {
             swap( r );
